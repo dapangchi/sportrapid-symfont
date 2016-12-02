@@ -1,0 +1,58 @@
+SnapRapid\Core\Model\Post:
+    type: document
+    collection: posts
+
+    fields:
+        id:
+            type: bin_uuid
+            id: true
+            strategy: NONE
+        statistics:
+            type: hash
+        tags:
+            type: collection
+        url:
+            type: string
+        content:
+            type: string
+        publishedAt:
+            name: published_at
+            type: date
+            index: true
+        postType:
+            name: post_type
+            type: int
+        obtainedBy:
+            name: obtained_by
+            type: hash
+        images:
+            type: collection
+        videos:
+            type: collection
+#        medias:
+#            type: collection
+        valuation:
+            type: collection
+        sentiment:
+            type: float
+        webContent:
+            name: web_content
+            type: hash
+        source:
+            type: string
+
+    referenceOne:
+        platform:
+            targetDocument: Platform
+            simple: true
+            storeAs: id
+        author:
+            targetDocument: Author
+            name: author_id
+            simple: true
+            storeAs: id
+
+    referenceMany:
+        topics:
+            targetDocument: Topic
+            storeAs: id

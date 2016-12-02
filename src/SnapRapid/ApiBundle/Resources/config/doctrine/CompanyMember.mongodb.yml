@@ -1,0 +1,59 @@
+SnapRapid\Core\Model\CompanyMember:
+    type: document
+    collection: company_members
+    gedmo:
+        soft_deleteable:
+            field_name: deletedAt
+
+    fields:
+        id:
+            type: id
+            id: true
+        email:
+            type: string
+        enabled:
+            type: boolean
+        isAdmin:
+            type: boolean
+        invitationToken:
+            expose: true
+            type: string
+        acceptedAt:
+            type: date
+        createdAt:
+            type: date
+            gedmo:
+                timestampable:
+                    on: create
+        updatedAt:
+            type: date
+            gedmo:
+                timestampable:
+                    on: update
+        deletedAt:
+            type: date
+
+    referenceOne:
+        company:
+            targetDocument: Company
+            mappedBy: members
+        matchingUser:
+            targetDocument: User
+            storeAs: id
+            nullable: true
+        user:
+            targetDocument: User
+            nullable: true
+            mappedBy: companyMemberRoles
+        createdBy:
+            targetDocument: User
+            storeAs: id
+            gedmo:
+                blameable:
+                    on: create
+        updatedBy:
+            targetDocument: User
+            storeAs: id
+            gedmo:
+                blameable:
+                    on: update

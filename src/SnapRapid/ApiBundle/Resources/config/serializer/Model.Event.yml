@@ -1,0 +1,36 @@
+SnapRapid\Core\Model\Event:
+    exclusion_policy: ALL
+
+    properties:
+        id:
+            expose: true
+            type: string
+        name:
+            expose: true
+            type: string
+        dateRangeType:
+            expose: true
+            type: integer
+        dateRangeStart:
+            expose: true
+            type: DateTime<'Y-m-d'>
+        dateRangeEnd:
+            expose: true
+            type: DateTime<'Y-m-d'>
+        children:
+            expose: true
+            type: array<SnapRapid\Core\Model\Event>
+            max_depth: 1
+        parent:
+            expose: true
+            type: SnapRapid\Core\Model\Event
+            groups: [EventEdit]
+            max_depth: 1
+        topics:
+            expose: true
+            type: array<SnapRapid\Core\Model\Topic>
+            groups: [EventEdit]
+        path:
+            expose: true
+            type: string
+            groups: [EventList]

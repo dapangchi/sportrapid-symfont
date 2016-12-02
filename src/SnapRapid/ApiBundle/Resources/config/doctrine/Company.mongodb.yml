@@ -1,0 +1,64 @@
+SnapRapid\Core\Model\Company:
+    type: document
+    collection: companies
+
+    fields:
+        id:
+            type: id
+            id: true
+        name:
+            type: string
+            unique: true
+        contactName:
+            type: string
+        contactEmail:
+            type: string
+        contactPhone:
+            type: string
+        coverageTypes:
+            type: collection
+        maxMembers:
+            type: int
+        enabled:
+            type: boolean
+        createdAt:
+            type: date
+            gedmo:
+                timestampable:
+                    on: create
+        updatedAt:
+            type: date
+            gedmo:
+                timestampable:
+                    on: update
+
+    referenceOne:
+        createdBy:
+            targetDocument: User
+            storeAs: id
+            gedmo:
+                blameable:
+                    on: create
+        updatedBy:
+            targetDocument: User
+            storeAs: id
+            gedmo:
+                blameable:
+                    on: update
+
+    referenceMany:
+        members:
+            targetDocument: CompanyMember
+            storeAs: id
+            inversedBy: company
+            cascade: [persist, refresh, remove]
+            orphanRemoval: true
+        labels:
+            targetDocument: Label
+            storeAs: id
+        topics:
+            targetDocument: Topic
+            storeAs: id
+        events:
+            targetDocument: Event
+            storeAs: id

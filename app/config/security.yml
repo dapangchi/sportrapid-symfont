@@ -1,0 +1,50 @@
+security:
+    providers:
+        api:
+            id: security_user_provider
+
+    encoders:
+        SnapRapid\Core\Model\User:
+            algorithm: bcrypt
+            cost: "%bcrypt_cost%"
+        SnapRapid\ApiBundle\Security\User\SecurityUser:
+            algorithm: bcrypt
+            cost: "%bcrypt_cost%"
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        auth:
+            pattern:  ^/auth/login
+            stateless: true
+            anonymous: true
+            jwt_auth: ~
+            provider: api
+
+        api:
+            pattern:   ^/
+            stateless: true
+            anonymous: true
+            lexik_jwt:
+                authorization_header:
+                    enabled: true
+                    prefix:  Bearer
+                query_parameter:
+                    enabled: false
+                authentication_provider: jwt_auth_provider
+
+    access_control:
+        - { path: ^/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/auth/request, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/auth/reset, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_USER }
+
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER, ROLE_CONTENT_MANAGER]
+        ROLE_CONTENT_MANAGER: [ROLE_CONTENT_CURATOR_KEYWORDS, ROLE_CONTENT_CURATOR_LOGOS]
+        ROLE_CONTENT_CURATOR_KEYWORDS: [ROLE_USER]
+        ROLE_CONTENT_CURATOR_LOGOS: [ROLE_USER]

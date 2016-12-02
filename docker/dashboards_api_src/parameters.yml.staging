@@ -1,0 +1,19 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: mongodb://mongodb-1.aws.snaprapid.local:27017,mongodb-2.aws.snaprapid.local:27017
+    database_port: null
+    database_name: backend
+    database_user: snap_rw
+    database_password: geVztXARsW76TgwwceLjzq8DyN6uJ4
+    database_sslmode: prefer
+    redis_dsn:  redis://10.0.7.152/2
+    mailer_user: laurent@snaprapid.com
+    mailer_password: W.d*&wNEm9(qDepQrbC9ue=
+    secret: FZ6qGx73hxaTBZ7TPEcdguqWZREu6D
+    base_url_host: api.dashboards.staging.snaprapid.com
+    base_url: 'http://api.dashboards.staging.snaprapid.com'
+    base_url_ssl: 'https://api.dashboards.staging.snaprapid.com'
+    website_url: 'http://dashboards.staging.snaprapid.com'
+    jwt_pass_phrase: WmrdcwYesTbsAdMhTbUjrv434y9F2P
+    jwt_private_key_path: %kernel.root_dir%/var/cert/private.pem
+    jwt_public_key_path: %kernel.root_dir%/var/cert/public.pem

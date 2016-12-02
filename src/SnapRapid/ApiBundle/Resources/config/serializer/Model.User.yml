@@ -1,0 +1,64 @@
+SnapRapid\Core\Model\User:
+    exclusion_policy: ALL
+
+    virtual_properties:
+        getIsAdmin:
+            expose: true
+            type: boolean
+            groups: [UserSelf, UserEdit, UserList]
+        getRole:
+            expose: true
+            type: string
+            groups: [UserEdit]
+
+    properties:
+        id:
+            expose: true
+            type: string
+            groups: [UserEdit, UserList]
+        email:
+            expose: true
+            type: string
+            groups: [UserSelf, UserEdit, UserList]
+        firstName:
+            expose: true
+            type: string
+            groups: [UserSelf, UserEdit, UserList]
+        lastName:
+            expose: true
+            type: string
+            groups: [UserSelf, UserEdit, UserList]
+        createdAt:
+            expose: true
+            type: DateTime<'Y-m-d H:i:s'>
+            groups: [UserList]
+        enabled:
+            expose: true
+            type: boolean
+            groups: [UserEdit, UserList]
+        apiAccessDateRangeStart:
+            expose: true
+            type: DateTime<'Y-m-d'>
+            groups: [UserEdit]
+        apiAccessDateRangeEnd:
+            expose: true
+            type: DateTime<'Y-m-d'>
+            groups: [UserEdit]
+        accountActivationToken:
+            expose: true
+            type: string
+            groups: [UserList]
+
+        # one to many
+        companyMemberRoles:
+            expose: true
+            type: array<SnapRapid\Core\Model\CompanyMember>
+            groups: [UserSelf]
+        notifications:
+            expose: true
+            type: array<SnapRapid\Core\Model\Notification>
+            groups: [UserSelf]
+        apiAccessLabels:
+            expose: true
+            type: array<SnapRapid\Core\Model\Label>
+            groups: [UserEdit]

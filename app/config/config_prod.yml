@@ -1,0 +1,64 @@
+imports:
+    - { resource: config.yml }
+    - { resource: parameters.yml }
+
+parameters:
+    monolog_transports:
+        monolog.handler.email: swiftmailer.mailer.local.transport.real
+    error_mail_sender: errors@%base_url_host%
+    error_mail_recipients: [tomilett@instantiate.co.uk, laurent@snaprapid.com]
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: error
+            handler:      error_group
+            excluded_404s:
+                - ^/
+        error_group:
+            type: group
+            members: [file_stream, error_buffer]
+        error_buffer:
+            type: buffer
+            handler: email
+        email:
+            type:       swift_mailer
+            from_email: "%error_mail_sender%"
+            to_email:   "%error_mail_recipients%"
+            subject:    Snap Rapid: Error occurred!
+            level:      debug
+            mailer:     swiftmailer.mailer.local
+        file_stream:
+            type:  stream
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+        console:
+            type:  console
+            verbosity_levels:
+                VERBOSITY_NORMAL: NOTICE
+                VERBOSITY_VERBOSE: DEBUG
+            channels: ["!doctrine"]
+
+doctrine_mongodb:
+    connections:
+        default:
+            server: "%database_host%"
+            options:
+                db:             %database_name%
+                username:       %database_user%
+                password:       %database_password%
+                readPreference: secondary
+                replicaSet:     SnapRapid
+
+swiftmailer:
+    default_mailer: sendgrid
+    mailers:
+        sendgrid:
+            transport:  smtp
+            host:       smtp.sendgrid.net
+            username:   "%mailer_user%"
+            password:   "%mailer_password%"
+            port:       587
+            encryption: tls
+            spool:      { type: memory }

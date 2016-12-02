@@ -1,0 +1,23 @@
+SnapRapid\Core\Model\Query:
+    type: document
+    collection: queries
+
+    fields:
+        id:
+            type: id
+            id: true
+        createdAt:
+            type: date
+            name: _created
+        updatedAt:
+            type: date
+            name: _updated
+        priority:
+            type: int
+        keywords:
+            type: string
+
+    referenceMany:
+        topics:
+            targetDocument: Topic
+            storeAs: id

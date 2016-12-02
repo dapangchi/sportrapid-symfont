@@ -1,0 +1,24 @@
+{% extends 'SnapRapidApiBundle:Emails:template.eml.twig' %}
+
+{%- block subject -%}
+    Snap Rapid: Activate your account
+{%- endblock subject -%}
+
+{% block content %}
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_headingStyles.html.twig' %}>
+        Hi {{ user.firstName }},
+    </p>
+
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_paraStyles.html.twig' %}>
+        You have been added as a new Snap Rapid user.
+        To activate your account and set your password, please click this link:
+    </p>
+
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_paraStyles.html.twig' %}>
+        <a target="_blank" title="Activate Account"
+           href="{{ websiteUrl }}/activate-account/{{ user.accountActivationToken }}"
+           {% include 'SnapRapidApiBundle:Emails/Common:_linkStyles.html.twig' %}>{{ websiteUrl }}/activate-account/{{ user.accountActivationToken }}</a>
+    </p>
+
+    {% include 'SnapRapidApiBundle:Emails/Common:_signOff.html.twig' %}
+{% endblock %}

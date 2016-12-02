@@ -1,0 +1,16 @@
+.vagrant
+Vagrantfile
+ansible
+ci
+ansible.cfg
+**/*.php_cs
+**/*.gitattributes
+**/*.gitignore
+**/*.gitkeep
+**/*.DS_Store
+**/*README.md
+**/*Gemfile
+**/*.dist
+
+app/logs
+app/cache

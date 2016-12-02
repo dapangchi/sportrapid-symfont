@@ -1,0 +1,26 @@
+SnapRapid\Core\Model\Media:
+    type: document
+    collection: medias
+
+    fields:
+        id:
+            type: id
+            id: true
+            strategy: NONE
+        type:
+            type: int
+        createdAt:
+            type: date
+            name: created_at
+
+    referenceMany:
+        labels:
+            name: visual_labels
+            targetDocument: Label
+            storeAs: id
+        topics:
+            targetDocument: Topic
+            storeAs: id
+        posts:
+            targetDocument: Topic
+            storeAs: id

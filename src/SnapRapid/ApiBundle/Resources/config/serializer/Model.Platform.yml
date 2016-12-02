@@ -1,0 +1,22 @@
+SnapRapid\Core\Model\Platform:
+    exclusion_policy: ALL
+
+    properties:
+        id:
+            expose: true
+            type: string
+        name:
+            expose: true
+            type: string
+        displayName:
+            expose: true
+            type: string
+        iconClass:
+            expose: true
+            type: string
+        hasImages:
+            expose: true
+            type: boolean
+        hasVideos:
+            expose: true
+            type: boolean

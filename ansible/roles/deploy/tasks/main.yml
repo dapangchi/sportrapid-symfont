@@ -1,0 +1,74 @@
+---
+- name: Set up deployment structure
+  file: path={{ deploy_project_root }}/{{ item }} state=directory
+  with_items:
+    - releases
+    - shared
+    - .git_cache
+
+- name: Create shared folders
+  file: path={{ deploy_project_root }}/shared/{{ item }} state=directory
+  with_items: deploy_shared_folders
+
+- name: Create shared file folders
+  file: path={{ deploy_project_root }}/shared/{{ item.path }} state=directory
+  with_items: deploy_shared_files
+
+- name: Create shared files
+  copy: content="" dest={{ deploy_project_root }}/shared/{{ item.path }}/{{ item.filename }} force=no
+  with_items: deploy_shared_files
+
+- name: Clone repo to cache
+  git: repo={{ deploy_repository }} dest={{ deploy_project_root }}/.git_cache version={{ deploy_branch }} force=yes
+  register: deploy_git_output
+
+- name: Create release dir
+  file: path={{ deploy_project_root }}/releases/{{ deploy_timestamp }} state=directory
+
+- name: Set deploy exclusions
+  template: src={{ deploy_exclusions_template }} dest={{ deploy_project_root }}/deploy_exclusions
+
+- name: Copy cache to release
+  command: rsync -a --exclude-from="{{ deploy_project_root }}/deploy_exclusions" {{ deploy_project_root }}/.git_cache/ {{ deploy_project_root }}/releases/{{ deploy_timestamp }}
+
+- name: Clear symlink target folders
+  file: path={{ deploy_project_root }}/releases/{{ deploy_timestamp }}/{{ item }} state=absent
+  with_items: deploy_shared_folders
+
+- name: Symlink folders
+  file: src={{ deploy_project_root }}/shared/{{ item }} dest={{ deploy_project_root }}/releases/{{ deploy_timestamp }}/{{ item }} state=link force=yes
+  with_items: deploy_shared_folders
+
+- name: Symlink files
+  file: src={{ deploy_project_root }}/shared/{{ item.path }}/{{ item.filename }} dest={{ deploy_project_root }}/releases/{{ deploy_timestamp }}/{{ item.path }}/{{ item.filename }} state=link force=yes
+  with_items: deploy_shared_files
+
+- name: Check for previous release
+  stat: path={{ deploy_project_root }}/current follow=yes
+  register: deploy_previous_release
+
+- name: Copy vendors from previous release
+  command: rsync -a {{ deploy_project_root }}/current/{{ item }}/ {{ deploy_project_root }}/releases/{{ deploy_timestamp }}/{{ item }}
+  with_items: deploy_copy_vendors
+  when: deploy_previous_release.stat.exists
+
+- name: Run project specific tasks
+  include: ../../../tasks/{{ deploy_app_specific_tasks }}
+
+- name: Set permissions
+  command: "setfacl -{{ 'd' if item.default|default(false) else '' }}{{ 'R' if item.recurse|default(false) else '' }}m u:{{ item.user }}:{{ item.permissions }} {{ item.path }}"
+  with_items: deploy_permissions
+
+- name: Install crons
+  cron: user={{ ansible_ssh_user }} minute={{ item.time.0 }} hour={{ item.time.1 }} day={{ item.time.2 }} month={{ item.time.3 }} weekday={{ item.time.4 }} state=present job="{{ item.job }}" name="{{ item.name }}"
+  with_items: deploy_crons
+  when: not deploy_no_crons
+
+- name: Link current release
+  release_folder: path={{ deploy_project_root }} prefix="" state=exists symlink=current timestamp={{ deploy_timestamp }}
+
+- name: Run project post-link tasks
+  include: ../../../tasks/{{ deploy_post_link_tasks }}
+
+- name: Clean old releases
+  release_folder: path={{ deploy_project_root }} prefix="" state=cleaned keep={{ deploy_keep_releases }}

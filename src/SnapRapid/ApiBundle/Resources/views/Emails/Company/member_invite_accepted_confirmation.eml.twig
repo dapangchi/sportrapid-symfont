@@ -1,0 +1,15 @@
+{% extends 'SnapRapidApiBundle:Emails:template.eml.twig' %}
+
+{%- block subject -%}
+    Snap Rapid: You have been added to {{ company.name }}
+{%- endblock subject -%}
+
+{% block content %}
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_headingStyles.html.twig' %}>
+        Hi {{ memberWhoAccepted.user.firstName }},
+    </p>
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_paraStyles.html.twig' %}>
+        You are now a member of "{{ company.name }}" on Snap Rapid.
+    </p>
+    {% include 'SnapRapidApiBundle:Emails/Common:_signOff.html.twig' %}
+{% endblock %}

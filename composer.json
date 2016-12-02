@@ -1,0 +1,80 @@
+{
+    "name": "snaprapid-dashboards-api",
+    "description": "Snap Rapid Dashboards API",
+    "license": "proprietary",
+    "type": "project",
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.9",
+        "symfony/symfony": "2.7.*",
+        "doctrine/mongodb-odm": "dev-master",
+        "doctrine/mongodb-odm-bundle": "~3.0",
+        "doctrine/doctrine-bundle": "~1.2",
+        "twig/extensions": "~1.0",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "symfony/monolog-bundle": "~2.4",
+        "sensio/distribution-bundle": "~3.0",
+        "sensio/framework-extra-bundle": "~3.0",
+        "nelmio/cors-bundle": "~1.4.1",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "lexik/jwt-authentication-bundle": "~1.0.6",
+        "nelmio/api-doc-bundle": "~2.7",
+        "friendsofsymfony/rest-bundle": "~1.4.0",
+        "jms/serializer-bundle": "~1.1.0",
+        "willdurand/hateoas-bundle": "~1.1.1",
+        "pagerfanta/pagerfanta": "~1.0",
+        "gedmo/doctrine-extensions": "dev-master",
+        "gordalina/cachetool": "~1.9.1",
+        "snc/redis-bundle": "~1.1.10",
+        "predis/predis": "~1.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.3.*",
+        "instaclick/base-test-bundle": "dev-master",
+        "raulfraile/ladybug-bundle": "~1.0",
+        "phploc/phploc": "~2.0.3",
+        "jakub-onderka/php-parallel-lint": "~0.8",
+        "jakub-onderka/php-var-dump-check": "~0.1",
+        "jakub-onderka/php-console-highlighter": "~0.1",
+        "fabpot/php-cs-fixer": "~1.11",
+        "doctrine/doctrine-fixtures-bundle": "~2.2"
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "SymfonyStandard\\Composer::hookRootPackageInstall"
+        ],
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "symfony-assets-install": "relative",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        },
+        "branch-alias": {
+            "dev-master": "2.7-dev"
+        }
+    }
+}

@@ -1,0 +1,43 @@
+SnapRapid\Core\Model\Notification:
+    type: document
+    collection: notifications
+    gedmo:
+        soft_deleteable:
+            field_name: deletedAt
+
+    fields:
+        id:
+            type: id
+            id: true
+        message:
+            type: string
+        positiveResponseBtn:
+            type: string
+        negativeResponseBtn:
+            type: string
+        neutralResponseBtn:
+            type: string
+        responseEvent:
+            type: string
+        relatedObjectId:
+            type: string
+        response:
+            type: int
+        createdAt:
+            type: date
+            gedmo:
+                timestampable:
+                    on: create
+        updatedAt:
+            type: date
+            gedmo:
+                timestampable:
+                    on: update
+        deletedAt:
+            type: date
+
+    referenceOne:
+        user:
+            targetDocument: User
+            storeAs: id
+            mappedBy: notifications

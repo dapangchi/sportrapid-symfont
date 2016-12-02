@@ -1,0 +1,26 @@
+SnapRapid\Core\Model\Author:
+    type: document
+    collection: authors
+
+    fields:
+        id:
+            type: bin_uuid
+            id: true
+            strategy: NONE
+        name:
+            type: string
+        screenName:
+            type: string
+            name: screen_name
+        description:
+            type: string
+        verified:
+            type: boolean
+        statistics:
+            type: hash
+
+    referenceOne:
+        platform:
+            targetDocument: Platform
+            storeAs: id
+            simple: true

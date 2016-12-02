@@ -1,0 +1,24 @@
+SnapRapid\Core\Model\Event:
+    constraints:
+        - Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique:
+            fields: path
+            message: This event name is already in use in a sibling event.
+            errorPath: name
+        - SnapRapid\ApiBundle\Validator\Constraint\EventDates: ~
+        - SnapRapid\ApiBundle\Validator\Constraint\EventParent: ~
+    properties:
+        name:
+            - NotBlank:
+                message: Event name must not be empty.
+            - Length:
+                min: 2
+                max: 100
+                minMessage: Event name must be at least 2 characters long.
+                maxMessage: Event name must be no more than 100 characters long.
+        dateRangeType:
+            - NotBlank:
+                message: Event must have a date range type
+        dateRangeStart:
+            - Date: ~
+        dateRangeEnd:
+            - Date: ~

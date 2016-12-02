@@ -1,0 +1,15 @@
+---
+deploy_branch: master
+deploy_exclusions_template: deploy_exclusions.j2
+deploy_shared_folders:
+  - app/logs
+deploy_shared_files: []
+#  - { path: app/config, filename: parameters.yml }
+deploy_keep_releases: 3
+deploy_env: prod
+deploy_copy_vendors:
+  - vendor
+  - bin
+deploy_production_vendors: true
+deploy_crons: []
+deploy_no_crons: false

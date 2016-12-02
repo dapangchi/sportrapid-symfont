@@ -1,0 +1,22 @@
+# This file is a "template" of what your parameters.yml file should look like
+parameters:
+    database_host:     127.0.0.1
+    database_name:     snaprapid
+    database_user:     snaprapid
+    database_password: ~
+    database_sslmode:  prefer
+    redis_dsn:         redis://127.0.0.1/0
+    mailer_user:     ~
+    mailer_password: ~
+
+    # A secret key that's used to generate certain security-related tokens
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    base_url_host: api.snaprapid.dev
+    base_url: 'http://api.snaprapid.dev'
+    base_url_ssl: 'https://api.snaprapid.dev'
+    website_url: 'http://snaprapid.dev'
+
+    jwt_pass_phrase:      JWTSSHKeyPassword
+    jwt_private_key_path: /some/path.key
+    jwt_public_key_path:  /some/path.pem

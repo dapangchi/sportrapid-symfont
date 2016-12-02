@@ -1,0 +1,12 @@
+SnapRapid\Core\Model\Label:
+    type: document
+    collection: labels
+
+    fields:
+        id:
+            type: id
+            id: true
+        name:
+            type: string
+        classifier:
+            type: string

@@ -1,0 +1,5 @@
+---
+mongodb_db_name: admin
+mongodb_db_user: admin
+mongodb_db_pass: password
+mongodb_port: 27017

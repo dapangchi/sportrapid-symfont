@@ -1,0 +1,4 @@
+---
+- name: Set symfony parameters
+  template: src=templates/app/sf_parameters.yml.j2 dest={{ sf_parameters_file }} owner={{ app_user }} group={{ app_user }} mode=0600
+  when: install_sf_parameters_file

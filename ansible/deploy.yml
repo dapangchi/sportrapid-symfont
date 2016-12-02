@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Get deploy timestamp
+      create_timestamp: timezone=""
+      register: timestamp
+
+- hosts: all
+  roles:
+    - deploy
+  vars:
+    deploy_timestamp: "{{ hostvars.localhost.timestamp.timestamp }}"
+    deploy_repository: git@bitbucket.org:snaprapid/dashboards_api.git
+    deploy_project_root: /home/{{ app_user }}/htdocs
+    deploy_env: "{{ app_env }}"
+    deploy_permissions:
+      - { path: "/home/{{ app_user }}", user: "{{ nginx_user }}", permissions: x }
+      - { path: "/home/{{ app_user }}/htdocs", user: "{{ nginx_user }}", permissions: x }
+      - { path: "/home/{{ app_user }}/htdocs/releases/", user: "{{ nginx_user }}", permissions: x }
+      - { path: "/home/{{ app_user }}/htdocs/releases/{{ deploy_timestamp }}", user: "{{ nginx_user }}", permissions: x }
+      - { path: "/home/{{ app_user }}/htdocs/releases/{{ deploy_timestamp }}/web", user: "{{ nginx_user }}", permissions: rx, recurse: true }
+      - { path: "/home/{{ app_user }}/htdocs/releases/{{ deploy_timestamp }}/web", user: "{{ nginx_user }}", permissions: rx, default: true, recurse: true }
+    deploy_app_specific_tasks: deploy/deploy.yml
+    deploy_post_link_tasks: deploy/noop.yml
+    deploy_copy_vendors:
+      - vendor
+      - bin
+    deploy_shared_folders:
+      - app/logs
+  vars_prompt:
+    - name: deploy_branch
+      prompt: "Deploy which branch?"
+      default: "master"
+      private: no

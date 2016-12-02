@@ -1,0 +1,27 @@
+services:
+    user_mailer:
+        class: SnapRapid\ApiBundle\Mailer\UserMailer
+        arguments:
+            - "@mailer"
+            - "@router"
+            - "@twig"
+            - "%website_url%"
+            - "%mailer_addresses%"
+
+    company_mailer:
+        class: SnapRapid\ApiBundle\Mailer\CompanyMailer
+        arguments:
+            - "@mailer"
+            - "@router"
+            - "@twig"
+            - "%website_url%"
+            - "%mailer_addresses%"
+
+    company_member_mailer:
+        class: SnapRapid\ApiBundle\Mailer\CompanyMemberMailer
+        arguments:
+            - "@mailer"
+            - "@router"
+            - "@twig"
+            - "%website_url%"
+            - "%mailer_addresses%"

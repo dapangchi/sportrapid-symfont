@@ -1,0 +1,19 @@
+{% extends 'SnapRapidApiBundle:Emails:template.eml.twig' %}
+
+{%- block subject -%}
+    Snap Rapid: {{ company.name }} wants to add you as a member
+{%- endblock subject -%}
+
+{% block content %}
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_headingStyles.html.twig' %}>
+        Hi,
+    </p>
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_paraStyles.html.twig' %}>
+        "{{ company.name }}" has invited you to join Snap Rapid as a member of "{{ company.name }}".
+    </p>
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_linkParaStyles.html.twig' %}>
+        <a href="{{ websiteUrl }}/sign-up/{{ memberAdded.invitationToken }}" {% include 'SnapRapidApiBundle:Emails/Common:_linkStyles.html.twig' %}
+                >{{ websiteUrl }}/sign-up/{{ memberAdded.invitationToken }}</a>
+    </p>
+    {% include 'SnapRapidApiBundle:Emails/Common:_signOff.html.twig' %}
+{% endblock %}

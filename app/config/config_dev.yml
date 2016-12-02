@@ -1,0 +1,52 @@
+imports:
+    - { resource: config.yml }
+
+parameters:
+    database_host: 127.0.0.1:27017
+    database_name: snaprapid
+    database_user: snaprapid
+    database_password: password
+    database_sslmode: prefer
+    redis_dsn: redis://127.0.0.1/0
+    local_mailer_port: 1025
+    secret: 519e3ece10ca70b6627a96452aa2145231822d1dca281eb6a4a29a85aea71b3e
+    base_url_host: api.snaprapid.dev
+    base_url: https://api.snaprapid.dev
+    base_url_ssl: https://api.snaprapid.dev
+    jwt_pass_phrase: vagrantssh
+    jwt_private_key_path: %kernel.root_dir%/var/jwt/private.pem
+    jwt_public_key_path: %kernel.root_dir%/var/jwt/public.pem
+    bcrypt_cost: 4 # reduce cost to minimum to speed up testing
+    website_url: "http://snaprapid.dev"
+
+framework:
+    router:
+        resource: "%kernel.root_dir%/config/routing_dev.yml"
+        strict_requirements: true
+    profiler: { only_exceptions: false }
+
+web_profiler:
+    toolbar: true
+    intercept_redirects: false
+
+monolog:
+    handlers:
+        main:
+            type:   stream
+            path:   "%kernel.logs_dir%/%kernel.environment%.log"
+            level:  info
+        console:
+            type:   console
+            bubble: false
+            verbosity_levels:
+                VERBOSITY_NORMAL: NOTICE
+                VERBOSITY_VERBOSE: DEBUG
+            channels: ["!doctrine"]
+        console_very_verbose:
+            type:   console
+            bubble: false
+            verbosity_levels:
+                VERBOSITY_VERBOSE: NOTICE
+                VERBOSITY_VERY_VERBOSE: NOTICE
+                VERBOSITY_DEBUG: DEBUG
+            channels: ["doctrine"]

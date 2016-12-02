@@ -1,0 +1,158 @@
+imports:
+    - { resource: security.yml }
+    - { resource: doctrine_extensions.yml }
+
+parameters:
+    router.request_context.host: "%base_url_host%"
+    local_mailer_port: 25
+    mailer_addresses:
+        notifications:
+            name: Snap Rapid
+            email: no-reply@snaprapid.com
+        contact:
+            name: Snap Rapid Team
+            email: laurent@snaprapid.com
+    bcrypt_cost: 13
+    web_platform_id: 56bb2a9fd4c6cfe4b41a0564
+
+framework:
+    #esi:             ~
+    #translator:      { fallback: "%locale%" }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: false
+    validation:
+        enabled: true
+        enable_annotations: false
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+        assets_base_urls:
+            http: ["%base_url%"]
+            ssl: ["%base_url_ssl%"]
+    default_locale:  en
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:         ~
+    fragments:       ~
+    http_method_override: true
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+# Doctrine Configuration
+doctrine_mongodb:
+    default_database: "%database_name%"
+    default_connection: "default"
+    connections:
+        default:
+            server: "%database_host%"
+            options: {}
+
+    document_managers:
+        default:
+            auto_mapping: false
+            mappings:
+                SnapRapidApiBundle:
+                    type: yml
+                    prefix: SnapRapid\Core\Model
+                    dir: 'Resources/config/doctrine'
+                tree:
+                    type: annotation
+                    alias: Gedmo
+                    prefix: Gedmo\Tree\Document
+                    dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Document"
+            filters:
+                softdeleteable:
+                    class: Gedmo\SoftDeleteable\Filter\ODM\SoftDeleteableFilter
+                    enabled: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    default_mailer: local
+    mailers:
+        local:
+            transport: smtp
+            host:      127.0.0.1
+            port:      "%local_mailer_port%"
+            spool:     { type: memory }
+
+sensio_framework_extra:
+    view:
+        annotations: false
+
+fos_rest:
+    access_denied_listener:
+        html: true
+        twig: true
+    param_fetcher_listener: force
+    body_listener:
+        array_normalizer: fos_rest.normalizer.camel_keys
+    view:
+        default_engine: json
+        view_response_listener: force
+        templating_formats:
+            html: true
+            twig: false
+    routing_loader:
+        default_format: json
+    format_listener:
+        rules:
+            - { path: '^/doc', priorities: [ 'html' ], fallback_format: ~, prefer_extension: false }
+            - { path: '^/', priorities: [ 'json' ], fallback_format: json, prefer_extension: false }
+    exception:
+        codes:
+            'SnapRapid\Core\Exception\InvalidArgumentsException': 400
+            'SnapRapid\Core\Exception\ConflictException': 409
+            'SnapRapid\Core\Exception\ObjectNotFoundException': 404
+        messages:
+            'SnapRapid\Core\Exception\CoreException': true
+    serializer:
+        serialize_null: true
+
+nelmio_cors:
+    paths:
+        '^/':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['POST', 'PUT', 'PATCH', 'GET', 'DELETE']
+            max_age: 3600
+
+jms_serializer:
+    metadata:
+        cache: ~
+        directories:
+            core:
+                namespace_prefix: "SnapRapid\\Core"
+                path: "@SnapRapidApiBundle/Resources/config/serializer"
+
+nelmio_api_doc:
+    name: SnapRapid API
+    sandbox:
+        request_format:
+            method: accept_header
+        authentication:
+            name: Authorization
+            delivery: http
+            type: bearer
+
+lexik_jwt_authentication:
+    private_key_path:   "%jwt_private_key_path%"
+    public_key_path:    "%jwt_public_key_path%"
+    pass_phrase:        "%jwt_pass_phrase%"
+    token_ttl:          86400
+
+snc_redis:
+    clients:
+        default:
+            alias: default
+            type: predis
+            options:
+                profile: 2.8
+            dsn: %redis_dsn%
+            logging: %kernel.debug%

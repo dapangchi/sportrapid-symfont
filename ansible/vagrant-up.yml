@@ -1,0 +1,12 @@
+---
+-   hosts: dev
+    sudo: false
+    tasks:
+    -   name: Composer install
+        composer: command=install no_dev=no working_dir=/vagrant
+
+    -   name: Update document indexes
+        shell: /vagrant/app/console doctrine:mongodb:schema:update --env=dev
+
+    -   name: Warm up Symfony cache
+        shell: /vagrant/app/console cache:warmup --env=dev

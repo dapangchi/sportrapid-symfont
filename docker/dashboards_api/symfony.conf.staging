@@ -1,0 +1,23 @@
+server {
+    listen 80;
+    listen [::]:80;
+    server_name api.dashboards.staging.snaprapid.com;
+    keepalive_timeout 60;
+
+    root /var/www/symfony/web;
+    index app.php;
+
+    location / {
+        try_files $uri $uri/ /app.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass php-upstream;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_index app.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SYMFONY_ENV prod;
+        include fastcgi_params;
+        fastcgi_read_timeout 3600;        
+    }
+}

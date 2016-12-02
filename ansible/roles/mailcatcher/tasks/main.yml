@@ -1,0 +1,15 @@
+---
+- name: Create mailcatcher user
+  user: name={{ mailcatcher_user }} createhome=no shell=/bin/false system=yes password=*
+
+- name: Install mailcatcher deps
+  apt: pkg=libsqlite3-dev state=latest update_cache=yes cache_valid_time=3600
+
+- name: Install mailcatcher
+  gem: name=mailcatcher user_install=no state=latest
+
+- name: Install mailcatcher service
+  template: src=etc/init.d/mailcatcher.j2 dest=/etc/init.d/mailcatcher owner=root group=root mode=0755
+
+- name: Enable mailcatcher service
+  service: name=mailcatcher enabled=yes state=started

@@ -1,0 +1,11 @@
+---
+- name: Add vagrant to ssh-users group
+  user: name=vagrant groups=ssh-users append=yes
+
+- name: Remove puppet and chef agents
+  apt: pkg=chef,puppet state=absent purge=yes
+
+- name: Autoremove unused puppet and chef deps
+  command: apt-get -y --purge autoremove
+  register: check_autoremove
+  changed_when: "'packages will be REMOVED' in check_autoremove.stdout"

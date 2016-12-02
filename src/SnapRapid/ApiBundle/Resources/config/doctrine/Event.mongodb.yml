@@ -1,0 +1,84 @@
+SnapRapid\Core\Model\Event:
+    type: document
+    repositoryClass: Gedmo\Tree\Document\MongoDB\Repository\MaterializedPathRepository
+    collection: events
+    gedmo:
+        tree:
+            type: materializedPath
+            activateLocking: false # todo: this should be on really but it was causing lots of problems
+
+    fields:
+        id:
+            type: id
+            id: true
+        name:
+            type: string
+            gedmo:
+                0: treePathSource
+        dateRangeType:
+            type: int
+        dateRangeStart:
+            type: date
+        dateRangeEnd:
+            type: date
+        createdAt:
+            type: date
+            gedmo:
+                timestampable:
+                    on: create
+        updatedAt:
+            type: date
+            gedmo:
+                timestampable:
+                    on: update
+        path:
+            type:   string
+            unique: true
+            gedmo:
+                treePath:
+                    separator:           '>'
+                    appendId:            false
+                    startsWithSeparator: false
+                    endsWithSeparator:   false
+        level:
+            type:   int
+            nullable:   true
+            gedmo:
+                -   treeLevel
+        lockTime:
+            type:   date
+            gedmo:
+                -   treeLockTime
+        hash:
+            type:   string
+            gedmo:
+                -   treePathHash
+        parent:
+            reference:  true
+            type:       one
+            inversedBy: children
+            targetDocument: Event
+            simple:     true
+            storeAs: id
+            gedmo:
+                -   treeParent
+
+    referenceOne:
+        createdBy:
+            targetDocument: User
+            storeAs: id
+            gedmo:
+                blameable:
+                    on: create
+        updatedBy:
+            targetDocument: User
+            storeAs: id
+            gedmo:
+                blameable:
+                    on: update
+
+    referenceMany:
+        topics:
+            targetDocument: Topic
+            storeAs: id
+            simple: true

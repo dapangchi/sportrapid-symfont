@@ -1,0 +1,19 @@
+SnapRapid\Core\Model\Author:
+    exclusion_policy: ALL
+
+    properties:
+        id:
+            expose: true
+            type: string
+            access_type: public_method
+            accessor:
+                getter: getIdAsString
+        name:
+            expose: true
+            type: string
+        screenName:
+            expose: true
+            type: string
+        statistics:
+            expose: true
+            type: array

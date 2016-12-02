@@ -1,0 +1,40 @@
+# services to handle doctrine extensions
+# import it in config.yml
+services:
+    gedmo.listener.blameable:
+        class: Gedmo\Blameable\BlameableListener
+        tags:
+            - { name: doctrine_mongodb.odm.event_subscriber, connection: default }
+
+    gedmo.listener.timestampable:
+        class: Gedmo\Timestampable\TimestampableListener
+        tags:
+            - { name: doctrine_mongodb.odm.event_subscriber, connection: default }
+
+    gedmo.listener.softdeleteable:
+        class: Gedmo\SoftDeleteable\SoftDeleteableListener
+        tags:
+            - { name: doctrine_mongodb.odm.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    gedmo.listener.tree:
+        class: Gedmo\Tree\TreeListener
+        tags:
+            - { name: doctrine_mongodb.odm.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    document_not_found_listener:
+        class: SnapRapid\ApiBundle\EventListener\DocumentNotFoundListener
+        tags:
+            - { name: doctrine_mongodb.odm.event_subscriber, connection: default }
+
+    blameable_user_fetcher:
+        class: SnapRapid\ApiBundle\EventListener\BlameableUserFetcher
+        arguments:
+            - "@gedmo.listener.blameable"
+            - "@security.token_storage"
+            - "@security.authorization_checker"
+        tags:
+            - { name: kernel.event_subscriber }

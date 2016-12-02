@@ -1,0 +1,19 @@
+SnapRapid\Core\Model\Notification:
+    exclusion_policy: ALL
+
+    properties:
+        id:
+            expose: true
+            type: string
+        message:
+            expose: true
+            type: string
+        positiveResponseBtn:
+            expose: true
+            type: string
+        negativeResponseBtn:
+            expose: true
+            type: string
+        neutralResponseBtn:
+            expose: true
+            type: string

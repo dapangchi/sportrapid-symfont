@@ -1,0 +1,5 @@
+---
+php_timezone: Europe/London
+php_cli_default_settings:
+  - { section: date, option: date.timezone, value: "{{ php_timezone }}" }
+php_cli_settings: []

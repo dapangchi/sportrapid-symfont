@@ -1,0 +1,36 @@
+SnapRapid\Core\Model\CompanyMember:
+    exclusion_policy: ALL
+
+    properties:
+        id:
+            expose: true
+            type: string
+            groups: [CompanyEdit]
+        isAdmin:
+            expose: true
+            groups: [UserSelf, CompanyEdit]
+        enabled:
+            expose: true
+            groups: [UserSelf, CompanyEdit]
+        acceptedAt:
+            expose: true
+            type: DateTime<'Y-m-d H:i:s'>
+            groups: [CompanyEdit]
+        company:
+            expose: true
+            type: SnapRapid\Core\Model\Company
+            groups: [UserSelf]
+
+    virtual_properties:
+        getEmail:
+            expose: true
+            type: string
+            groups: [CompanyEdit]
+        getFirstName:
+            expose: true
+            type: string
+            groups: [CompanyEdit]
+        getLastName:
+            expose: true
+            type: string
+            groups: [CompanyEdit]

@@ -1,0 +1,18 @@
+---
+- name: Install symfony parameters
+  command: cp {{ sf_parameters_file }} {{ deploy_project_root }}/releases/{{ deploy_timestamp }}/app/config/parameters.yml
+
+- name: Install composer vendors
+  composer: command=install no_dev={{ deploy_production_vendors }} no_scripts=yes prefer_dist=yes working_dir={{ deploy_project_root }}/releases/{{ deploy_timestamp }}
+
+- name: Build symfony bootstrap
+  command: php vendor/sensio/distribution-bundle/Sensio/Bundle/DistributionBundle/Resources/bin/build_bootstrap.php chdir={{ deploy_project_root }}/releases/{{ deploy_timestamp }}
+
+- name: Update document indexes
+  command: php app/console doctrine:mongodb:schema:update --env={{ deploy_env }} chdir={{ deploy_project_root }}/releases/{{ deploy_timestamp }}
+
+- name: Clear symfony cache
+  command: php app/console cache:clear --env={{ deploy_env }} chdir={{ deploy_project_root }}/releases/{{ deploy_timestamp }}
+
+- name: Install symfony assets
+  command: php app/console assets:install --env={{ deploy_env }} chdir={{ deploy_project_root }}/releases/{{ deploy_timestamp }}

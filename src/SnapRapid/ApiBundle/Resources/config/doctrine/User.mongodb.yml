@@ -1,0 +1,89 @@
+SnapRapid\Core\Model\User:
+    type: document
+    collection: dashboard_users
+    gedmo:
+        soft_deleteable:
+            field_name: deletedAt
+
+    fields:
+        id:
+            type: id
+            id: true
+        email:
+            type: string
+        emailCanonical:
+            type: string
+            unique: true
+            sparse: true
+        firstName:
+            type: string
+        lastName:
+            type: string
+        enabled:
+            type: boolean
+        salt:
+            type: string
+            length: 255
+        password:
+            type: string
+        passwordResetToken:
+            type: string
+            unique: true
+            sparse: true
+        passwordResetTokenExpiresAt:
+            type: date
+        accountActivationToken:
+            type: string
+        lastLogin:
+            type: date
+        roles:
+            type: collection
+        apiAccessDateRangeStart:
+            type: date
+        apiAccessDateRangeEnd:
+            type: date
+        createdAt:
+            type: date
+            gedmo:
+                timestampable:
+                    on: create
+        updatedAt:
+            type: date
+            gedmo:
+                timestampable:
+                    on: update
+        deletedAt:
+            type: date
+
+    referenceOne:
+        createdBy:
+            targetDocument: User
+            storeAs: id
+            gedmo:
+                blameable:
+                    on: create
+        updatedBy:
+            targetDocument: User
+            storeAs: id
+            gedmo:
+                blameable:
+                    on: update
+
+    referenceMany:
+        companyMemberRoles:
+            targetDocument: CompanyMember
+            storeAs: id
+            inversedBy: user
+            cascade: [persist, refresh, remove]
+            orphanRemoval: true
+        notifications:
+            targetDocument: Notification
+            storeAs: id
+            inversedBy: user
+            cascade: [persist, refresh, remove]
+            orphanRemoval: true
+            orderBy:
+                createdAt: ASC
+        apiAccessLabels:
+            targetDocument: Label
+            storeAs: id

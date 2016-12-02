@@ -1,0 +1,13 @@
+SnapRapid\Core\Model\Topic:
+    exclusion_policy: ALL
+
+    properties:
+        id:
+            expose: true
+            type: string
+        name:
+            expose: true
+            type: string
+        isRootTopic:
+            expose: true
+            type: boolean

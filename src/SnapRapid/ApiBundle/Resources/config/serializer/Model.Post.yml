@@ -1,0 +1,58 @@
+SnapRapid\Core\Model\Post:
+    exclusion_policy: ALL
+
+    properties:
+        id:
+            expose: true
+            type: string
+            access_type: public_method
+            accessor:
+                getter: getIdAsString
+        postType:
+            expose: true
+            type: integer
+        statistics:
+            expose: true
+            type: array
+        tags:
+            expose: true
+            type: array
+        url:
+            expose: true
+            type: string
+        content:
+            expose: true
+            type: string
+        publishedAt:
+            expose: true
+            type: DateTime<'F jS g:ia'>
+        images:
+            expose: true
+            type: array
+        videos:
+            expose: true
+            type: array
+#        medias:
+#            expose: true
+#            type: array
+        valuation:
+            expose: true
+            type: array
+        sentiment:
+            expose: true
+            type: integer
+            access_type: public_method
+            accessor:
+                getter: getVerifiedSentiment
+        webContent:
+            expose: true
+            type: array
+        source:
+            expose: true
+            type: string
+        platform:
+            expose: true
+            type: SnapRapid\Core\Model\Platform
+        author:
+            expose: true
+            type: SnapRapid\Core\Model\Author

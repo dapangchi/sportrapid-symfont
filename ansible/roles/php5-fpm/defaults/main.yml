@@ -1,0 +1,11 @@
+---
+php_timezone: Europe/London
+php_fpm_default_settings:
+  - { section: date, option: date.timezone, value: "{{ php_timezone }}" }
+  - { section: opcache, option: opcache.enable, value: 1 }
+  - { section: opcache, option: opcache.max_accelerated_files, value: 50000 }
+  - { section: opcache, option: opcache.revalidate_path, value: 1 }
+  - { section: opcache, option: opcache.use_cwd, value: 1 }
+  - { section: PHP, option: memory_limit, value: 256M }
+php_fpm_settings: []
+php_fpm_pools: []

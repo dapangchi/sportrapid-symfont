@@ -1,0 +1,22 @@
+SnapRapid\Core\Model\Platform:
+    type: document
+    collection: platforms
+
+    fields:
+        id:
+            type: id
+            id: true
+        name:
+            type: string
+        displayName:
+            name: display_name
+            type: string
+        iconClass:
+            name: icon_class
+            type: string
+        hasImages:
+            name: has_images
+            type: boolean
+        hasVideos:
+            name: has_videos
+            type: boolean

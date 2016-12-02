@@ -1,0 +1,52 @@
+---
+vagrant: true
+nginx_user: vagrant
+app_user: vagrant
+app_env: dev
+
+db_host: 127.0.0.1
+db_password: password
+
+mysql_innodb_buffer_pool_size: 128M
+mysql_root_password: password
+
+mongodb_db_name: snaprapid
+mongodb_db_user: snaprapid
+mongodb_db_pass: password
+mongodb_port: 27017
+
+php_fpm_pools:
+-   src: dev/snaprapid_dev.conf.j2
+    dest: snaprapid_dev.conf
+nginx_vhosts:
+-   src: dev/snaprapid_dev.j2
+    dest: snaprapid_dev
+
+php_fpm_settings:
+-   { section: xdebug, option: xdebug.remote_enable, value: 'on' }
+-   { section: xdebug, option: xdebug.remote_host, value: 192.168.42.1 }
+-   { section: xdebug, option: xdebug.remote_autostart, value: 'on' }
+-   { section: xdebug, option: xdebug.idekey, value: default }
+-   { section: xdebug, option: xdebug.max_nesting_level, value: 250 }
+
+php_cli_settings:
+-   { section: xdebug, option: xdebug.remote_enable, value: 'on' }
+-   { section: xdebug, option: xdebug.remote_host, value: 192.168.42.1 }
+-   { section: xdebug, option: xdebug.remote_autostart, value: 'on' }
+-   { section: xdebug, option: xdebug.idekey, value: default }
+-   { section: xdebug, option: xdebug.max_nesting_level, value: 250 }
+
+php_packages:
+-   php5-curl
+-   php5-gmp
+-   php5-intl
+-   php5-mcrypt
+-   php5-xdebug
+-   php5-mongo
+
+deploy_production_vendors: false
+
+local_hostnames:
+-   api.snaprapid.dev
+
+install_sf_parameters_file: false

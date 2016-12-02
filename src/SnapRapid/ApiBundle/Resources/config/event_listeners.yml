@@ -1,0 +1,49 @@
+services:
+    user_event_listener:
+        class: SnapRapid\Core\EventListener\UserEventListener
+        arguments:
+            - "@user_mailer"
+        tags:
+            - { name: kernel.event_listener, event: user.account.created, method: onCreate }
+            - { name: kernel.event_listener, event: user.account.activated, method: onActivate }
+            - { name: kernel.event_listener, event: user.account.activationresend, method: onActivationResendRequested }
+            - { name: kernel.event_listener, event: user.account.updated, method: onUpdate }
+            - { name: kernel.event_listener, event: user.account.removed, method: onRemove }
+            - { name: kernel.event_listener, event: user.logged_in, method: onLogIn }
+            - { name: kernel.event_listener, event: user.passwordreset.requested, method: onPasswordResetRequested }
+            - { name: kernel.event_listener, event: user.passwordreset.reset, method: onPasswordReset }
+
+    company_event_listener:
+        class: SnapRapid\Core\EventListener\CompanyEventListener
+        arguments:
+            - "@company_mailer"
+        tags:
+            - { name: kernel.event_listener, event: company.created, method: onCreate }
+            - { name: kernel.event_listener, event: company.updated, method: onUpdate }
+            - { name: kernel.event_listener, event: company.removed, method: onRemove }
+
+    company_member_event_listener:
+        class: SnapRapid\Core\EventListener\CompanyMemberEventListener
+        arguments:
+            - "@company_manager"
+            - "@company_member_mailer"
+        tags:
+            - { name: kernel.event_listener, event: company.member.added, method: onAddMember }
+            - { name: kernel.event_listener, event: company.member.updated, method: onUpdateMember }
+            - { name: kernel.event_listener, event: company.member.invite_responded_to, method: onResponseToInvite }
+            - { name: kernel.event_listener, event: company.member.invite_accepted, method: onAcceptInvite }
+            - { name: kernel.event_listener, event: company.member.invite_declined, method: onDeclineInvite }
+            - { name: kernel.event_listener, event: company.member.invite_resend, method: onInviteResendRequested }
+            - { name: kernel.event_listener, event: company.member.removed, method: onRemoveMember }
+
+    dashboard_cache_event_listener:
+        class: SnapRapid\ApiBundle\EventListener\DashboardCacheEventListener
+        arguments:
+            - "@snc_redis.default"
+            - "@event_repository"
+        tags:
+            - { name: kernel.event_listener, event: company.updated, method: onUpdateCompany }
+            - { name: kernel.event_listener, event: company.removed, method: onUpdateCompany }
+            - { name: kernel.event_listener, event: event.updated, method: onUpdateEvent }
+            - { name: kernel.event_listener, event: event.removed, method: onUpdateEvent }
+

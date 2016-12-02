@@ -1,0 +1,50 @@
+services:
+    user_repository:
+        class: SnapRapid\ApiBundle\Repository\UserRepository
+        arguments:
+            - "@doctrine.odm.mongodb.document_manager"
+            - "@security.encoder_factory.generic"
+            - "@gedmo.listener.blameable"
+
+    company_repository:
+        class: SnapRapid\ApiBundle\Repository\CompanyRepository
+        arguments:
+            - "@doctrine.odm.mongodb.document_manager"
+
+    event_repository:
+        class: SnapRapid\ApiBundle\Repository\EventRepository
+        arguments:
+            - "@doctrine.odm.mongodb.document_manager"
+
+    label_repository:
+        class: SnapRapid\ApiBundle\Repository\LabelRepository
+        arguments:
+            - "@doctrine.odm.mongodb.document_manager"
+
+    notification_repository:
+        class: SnapRapid\ApiBundle\Repository\NotificationRepository
+        arguments:
+            - "@doctrine.odm.mongodb.document_manager"
+
+    platform_repository:
+        class: SnapRapid\ApiBundle\Repository\PlatformRepository
+        arguments:
+            - "@doctrine.odm.mongodb.document_manager"
+
+    post_repository:
+        class: SnapRapid\ApiBundle\Repository\PostRepository
+        arguments:
+            - "@doctrine.odm.mongodb.document_manager"
+            - "@dashboard_manager"
+            - "%web_platform_id%"
+
+    query_repository:
+        class: SnapRapid\ApiBundle\Repository\QueryRepository
+        arguments:
+            - "@doctrine.odm.mongodb.document_manager"
+            - "@dashboard_manager"
+
+    topic_repository:
+        class: SnapRapid\ApiBundle\Repository\TopicRepository
+        arguments:
+            - "@doctrine.odm.mongodb.document_manager"

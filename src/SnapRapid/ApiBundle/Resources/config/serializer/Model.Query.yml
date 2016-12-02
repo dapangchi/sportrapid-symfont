@@ -1,0 +1,13 @@
+SnapRapid\Core\Model\Query:
+    exclusion_policy: ALL
+
+    properties:
+        id:
+            expose: true
+            type: string
+        keywords:
+            expose: true
+            type: string
+        priority:
+            expose: true
+            type: integer

@@ -1,0 +1,15 @@
+{% extends 'SnapRapidApiBundle:Emails:template.eml.twig' %}
+
+{%- block subject -%}
+    Snap Rapid: {{ memberWhoWasRemoved.user.fullName }} has been removed from {{ company.name }}
+{%- endblock subject -%}
+
+{% block content %}
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_headingStyles.html.twig' %}>
+        Hi {{ user.firstName }},
+    </p>
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_paraStyles.html.twig' %}>
+        {{ memberWhoWasRemoved.user.fullName }} is no longer a member of "{{ company.name }}".
+    </p>
+    {% include 'SnapRapidApiBundle:Emails/Common:_signOff.html.twig' with { message: 'Thanks,' } %}
+{% endblock %}

@@ -1,0 +1,43 @@
+services:
+    user_manager:
+        class: SnapRapid\Core\Manager\UserManager
+        arguments:
+            - "@user_repository"
+            - "@company_repository"
+            - "@event_dispatcher"
+            - "@canonicalizer"
+        calls:
+            - [ setCompanyManager, [ "@company_manager" ] ]
+
+    company_manager:
+        class: SnapRapid\Core\Manager\CompanyManager
+        arguments:
+            - "@company_repository"
+            - "@event_dispatcher"
+        calls:
+            - [ setUserManager, [ "@user_manager" ] ]
+            - [ setEventManager, [ "@event_manager" ] ]
+            - [ setNotificationManager, [ "@notification_manager" ] ]
+
+    event_manager:
+        class: SnapRapid\Core\Manager\EventManager
+        arguments:
+            - "@event_repository"
+            - "@event_dispatcher"
+
+    dashboard_manager:
+        class: SnapRapid\Core\Manager\DashboardManager
+        arguments:
+            - "@doctrine_mongodb.odm.document_manager"
+            - "@doctrine_mongodb.odm.default_connection"
+            - "@snc_redis.default"
+            - "@event_repository"
+            - "%web_platform_id%"
+
+    notification_manager:
+        class: SnapRapid\Core\Manager\NotificationManager
+        arguments:
+            - "@notification_repository"
+            - "@event_dispatcher"
+        calls:
+            - [ setUserManager, [ "@user_manager" ] ]

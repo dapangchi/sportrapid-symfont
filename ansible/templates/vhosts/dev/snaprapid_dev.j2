@@ -1,0 +1,27 @@
+#
+# {{ ansible_managed }}
+#
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name api.snaprapid.dev;
+    keepalive_timeout 60;
+
+    root /vagrant/web;
+    index app.php;
+
+    location / {
+        try_files $uri $uri/ /app.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass 127.0.0.1:{{ app_fpm_port }};
+        fastcgi_index app.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SYMFONY_ENV {{ app_env }};
+        include fastcgi_params;
+        fastcgi_read_timeout 3600;
+    }
+}

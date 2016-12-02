@@ -1,0 +1,60 @@
+SnapRapid\Core\Model\Company:
+    exclusion_policy: ALL
+
+    properties:
+        id:
+            expose: true
+            type: string
+        name:
+            expose: true
+            type: string
+        contactName:
+            expose: true
+            type: string
+            groups: [CompanyEdit]
+        contactEmail:
+            expose: true
+            type: string
+            groups: [CompanyEdit]
+        contactPhone:
+            expose: true
+            type: string
+            groups: [CompanyEdit]
+        coverageTypes:
+            expose: true
+            type: array
+            groups: [CompanyList, CompanyEdit, UserSelf]
+        maxMembers:
+            expose: true
+            type: integer
+            groups: [CompanyEdit]
+        enabled:
+            expose: true
+            type: boolean
+            groups: [CompanyList, CompanyEdit]
+        createdAt:
+            expose: true
+            type: DateTime<'Y-m-d H:i:s'>
+            groups: [CompanyList, CompanyEdit]
+
+        # one to many
+        members:
+            expose: true
+            type: array<SnapRapid\Core\Model\CompanyMember>
+            groups: [CompanyEdit]
+        labels:
+            expose: true
+            type: array<SnapRapid\Core\Model\Label>
+            groups: [CompanyList, CompanyEdit, UserSelf]
+        topics:
+            expose: true
+            type: array<SnapRapid\Core\Model\Topic>
+            groups: [CompanyEdit]
+        events:
+            expose: true
+            type: array<SnapRapid\Core\Model\Event>
+            groups: [CompanyEdit]
+        eventStacks:
+            expose: true
+            type: array
+            groups: [CompanyList, UserSelf]

@@ -1,0 +1,67 @@
+services:
+
+    # forms
+    user_form:
+        class: SnapRapid\ApiBundle\Form\UserType
+        arguments:
+            - "@user_manager"
+        tags:
+            - { name: form.type, alias: user_form }
+
+    company_form:
+        class: SnapRapid\ApiBundle\Form\CompanyType
+        tags:
+            - { name: form.type, alias: company_form }
+
+    company_member_form:
+        class: SnapRapid\ApiBundle\Form\CompanyMemberType
+        tags:
+            - { name: form.type, alias: company_member_form }
+
+    event_form:
+        class: SnapRapid\ApiBundle\Form\EventType
+        tags:
+            - { name: form.type, alias: event_form }
+
+    # validators
+    company_member_duplicate_validator:
+        class: SnapRapid\ApiBundle\Validator\Constraint\CompanyMemberDuplicateValidator
+        arguments:
+            - "@canonicalizer"
+        tags:
+            - { name: validator.constraint_validator, alias: company_member_duplicate_validator }
+            
+    company_member_limit_validator:
+        class: SnapRapid\ApiBundle\Validator\Constraint\CompanyMemberLimitValidator
+        arguments:
+            - "@canonicalizer"
+        tags:
+            - { name: validator.constraint_validator, alias: company_member_limit_validator }
+
+    invitation_token_validator:
+        class: SnapRapid\ApiBundle\Validator\Constraint\InvitationTokenValidator
+        arguments:
+            - "@company_repository"
+        tags:
+            - { name: validator.constraint_validator, alias: invitation_token_validator }
+
+    event_dates_validator:
+        class: SnapRapid\ApiBundle\Validator\Constraint\EventDatesValidator
+        tags:
+            - { name: validator.constraint_validator, alias: event_dates_validator }
+
+    event_parent_validator:
+        class: SnapRapid\ApiBundle\Validator\Constraint\EventParentValidator
+        tags:
+            - { name: validator.constraint_validator, alias: event_parent_validator }
+
+    # types
+    simple_entity_type:
+        class: SnapRapid\ApiBundle\Form\SimpleEntityType
+        tags:
+            - { name: form.type, alias: simple_entity }
+
+    timestamp_type:
+        class: SnapRapid\ApiBundle\Form\TimestampType
+        tags:
+            - { name: form.type, alias: timestamp }

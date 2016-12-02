@@ -1,0 +1,15 @@
+{% extends 'SnapRapidApiBundle:Emails:template.eml.twig' %}
+
+{%- block subject -%}
+    Snap Rapid: You have declined the invite to join {{ company.name }}
+{%- endblock subject -%}
+
+{% block content %}
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_headingStyles.html.twig' %}>
+        Hi {{ memberWhoDeclined.matchingUser.firstName }},
+    </p>
+    <p {% include 'SnapRapidApiBundle:Emails/Common:_paraStyles.html.twig' %}>
+        You have declined the invite to join "{{ company.name }}".
+    </p>
+    {% include 'SnapRapidApiBundle:Emails/Common:_signOff.html.twig' with { message: 'Thanks,' } %}
+{% endblock %}

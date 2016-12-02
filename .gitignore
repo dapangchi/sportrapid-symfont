@@ -1,0 +1,39 @@
+# project files
+/.idea
+
+# local settings
+/app/config/parameters.yml
+/app/config/parameters_dev.yml
+
+# symfony app
+/app/bootstrap.php.cache
+/app/cache/*
+!app/cache/.gitkeep
+/app/config/local*.yml
+/app/config/deploy_version.yml
+/app/logs/*
+!app/logs/.gitkeep
+/app/pid/*
+!app/pid/.gitkeep
+/build/
+/vendor/
+/bin/
+/composer.phar
+
+# temp files
+/tmp
+
+# assets - api docs
+/web/bundles/
+
+# Mac indexes
+.DS_Store
+
+# Testing files
+/app/phpunit.xml
+
+# Coding standards cache
+/.php_cs.cache
+
+# Vagrant
+/.vagrant

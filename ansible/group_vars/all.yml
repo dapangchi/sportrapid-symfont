@@ -1,0 +1,21 @@
+---
+nginx_user: www-data
+db_name: snaprapid
+db_user: snaprapid
+db_host: 127.0.0.1
+
+app_env: test
+
+app_user: snaprapid
+app_fpm_port: 9000
+
+php_packages:
+-   php5-curl
+-   php5-gmp
+-   php5-intl
+-   php5-mcrypt
+-   php5-mysqlnd
+-   php5-mongo
+
+sf_parameters_file: /home/{{ app_user }}/parameters.yml
+install_sf_parameters_file: true

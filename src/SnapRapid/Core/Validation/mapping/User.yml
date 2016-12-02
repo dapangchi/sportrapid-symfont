@@ -1,0 +1,45 @@
+SnapRapid\Core\Model\User:
+    constraints:
+        - Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique:
+            fields: emailCanonical
+            errorPath: email
+            message: This email address is already in use.
+        - SnapRapid\ApiBundle\Validator\Constraint\ResetPasswordToken:
+            groups: [ResetPassword]
+        - SnapRapid\ApiBundle\Validator\Constraint\AccountActivationToken:
+            groups: [ActivateAccount]
+        - SnapRapid\ApiBundle\Validator\Constraint\InvitationToken:
+            groups: [Invitation]
+    properties:
+        firstName:
+            - NotBlank:
+                message: Your first name must not be empty.
+            - Length:
+                min: 2
+                max: 100
+                minMessage: Your first name must be at least 2 characters long.
+                maxMessage: Your first name must be no more than 100 characters long.
+        lastName:
+            - NotBlank:
+                message: Your last name must not be empty.
+            - Length:
+                min: 2
+                max: 100
+                minMessage: Your last name must be at least 2 characters long.
+                maxMessage: Your last name must be no more than 100 characters long.
+        email:
+            - NotBlank:
+                message: Your email must not be empty.
+            - Email:
+                message: This is not a valid email address.
+                checkMX: true
+        plainPassword:
+            - NotBlank:
+                message: Please provide a password.
+                groups: [Register, Invitation, ResetPassword, ChangePassword]
+            - Length:
+                min: 6
+                max: 100
+                minMessage: Your password must be at least 6 characters long.
+                maxMessage: Your password must be no more than 100 characters long.
+                groups: [Register, Invitation, ActivateAccount, ResetPassword, ChangePassword]

@@ -1,0 +1,98 @@
+language: php
+
+php:
+  - '5.6'
+
+branches:
+  only:
+    - master
+    - staging
+
+services:
+  - mongodb
+  - redis
+
+build:
+  cache: true
+  cache_dir_list:
+    - $SHIPPABLE_BUILD_DIR/vendor
+
+  ci:
+    # Check cache
+    - if [ -d vendor ]; then ls -la vendor; fi
+
+    # Set BUILD_ENV
+    - if [ $BRANCH = "master" ];  then BUILD_ENV='prod'; fi
+    - if [ $BRANCH = "staging" ]; then BUILD_ENV='staging'; fi
+    - if [ -z $BUILD_ENV ]; then echo "Wrong branch"; exit 1; else echo $BUILD_ENV; fi
+    - export BUILD_ENV
+
+    # set Timezone
+    - echo 'Europe/London' | sudo tee /etc/timezone
+    - dpkg-reconfigure --frontend noninteractive tzdata
+
+    # set Locale
+    - locale-gen en_GB.UTF-8
+    - dpkg-reconfigure --frontend noninteractive locales
+    - update-locale LANG="en_GB.UTF-8"
+
+    # Add extensions to php.ini
+    - echo "extension=redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    - echo "extension=mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    - sed -i 's/;date.timezone =/date.timezone = Europe\/London/' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+    # Install components by composer
+    - rm -f composer.lock
+    - composer --quiet self-update
+    - composer --quiet install
+
+    # Warm up Symfony cache
+    - cp -f docker/dashboards_api_src/parameters.yml.$BUILD_ENV app/config/parameters.yml
+    - cp -Hrf docker/dashboards_api_src/cert app/var/
+    - ./app/console cache:warmup --env=$BUILD_ENV
+
+  post_ci:
+
+    # build and push dashboards_backend
+    - docker build --build-arg BUILD_ENV=$BUILD_ENV -t registry.snaprapid.com/dashboards_backend_php:${BUILD_ENV}.latest -f docker/dashboards_backend_php/Dockerfile .
+    - docker tag  registry.snaprapid.com/dashboards_backend_php:${BUILD_ENV}.latest registry.snaprapid.com/dashboards_backend_php:${BUILD_ENV}.${BUILD_NUMBER}
+    - docker push registry.snaprapid.com/dashboards_backend_php:${BUILD_ENV}.latest
+    - docker push registry.snaprapid.com/dashboards_backend_php:${BUILD_ENV}.${BUILD_NUMBER}
+
+    # build and push dashboards_backend_data
+    - docker build --build-arg BUILD_ENV=$BUILD_ENV -t registry.snaprapid.com/dashboards_api_src:${BUILD_ENV}.latest -f docker/dashboards_api_src/Dockerfile .
+    - docker tag  registry.snaprapid.com/dashboards_api_src:${BUILD_ENV}.latest registry.snaprapid.com/dashboards_api_src:${BUILD_ENV}.${BUILD_NUMBER}
+    - docker push registry.snaprapid.com/dashboards_api_src:${BUILD_ENV}.latest
+    - docker push registry.snaprapid.com/dashboards_api_src:${BUILD_ENV}.${BUILD_NUMBER}
+
+    # build dashboards_api
+    - docker build --build-arg BUILD_ENV=$BUILD_ENV -t registry.snaprapid.com/dashboards_api:${BUILD_ENV}.latest -f docker/dashboards_api/Dockerfile .
+    - docker tag  registry.snaprapid.com/dashboards_api:${BUILD_ENV}.latest registry.snaprapid.com/dashboards_api:${BUILD_ENV}.${BUILD_NUMBER}
+    - docker push registry.snaprapid.com/dashboards_api:${BUILD_ENV}.latest
+    - docker push registry.snaprapid.com/dashboards_api:${BUILD_ENV}.${BUILD_NUMBER}
+
+  on_success:
+
+    # deploy "staging" over SnapRapid Swarm Cluster ("prod" deploying manually)
+    - export BASTION_KEY="/tmp/ssh/snaprapidinfra"
+    - if [ $BRANCH = "staging" ]; then ./docker/deploy_via_bastion.sh $BUILD_ENV; fi
+
+integrations:
+  hub:
+    - integrationName: RegistrySnapRapid
+      type: private docker registry
+
+  key:
+    - integrationName: snaprapidinfra
+      type: ssh-key
+
+#  notifications:
+#    - integrationName: SnapRapidHipChatNotify
+#      type: hipchat
+#      recipients:
+#        - '#CI Builds'
+#      branches:
+#        only:
+#          - master
+#          - staging
+#

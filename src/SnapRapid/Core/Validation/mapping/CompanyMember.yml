@@ -1,0 +1,15 @@
+SnapRapid\Core\Model\CompanyMember:
+    constraints:
+        - SnapRapid\ApiBundle\Validator\Constraint\CompanyMemberDuplicate:
+            groups: [AddMember]
+        - SnapRapid\ApiBundle\Validator\Constraint\CompanyMemberLimit:
+            groups: [AddMember]
+    properties:
+        email:
+            - NotBlank:
+                message: You must enter an email address.
+                groups: [AddMember]
+            - Email:
+                message: This is not a valid email address.
+                checkMX: true
+                groups: [AddMember]

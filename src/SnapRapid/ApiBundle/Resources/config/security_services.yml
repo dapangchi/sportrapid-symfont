@@ -1,0 +1,52 @@
+services:
+    jwt_auth_listener:
+        class: SnapRapid\ApiBundle\Security\Firewall\JWTAuthListener
+        arguments:
+            - "@security.token_storage"
+            - "@security.authentication.manager"
+            - ~
+            - "@lexik_jwt_authentication.handler.authentication_success"
+            - "@jwt_authentication_failure_handler"
+            - ~
+
+    jwt_auth_provider:
+        class: SnapRapid\ApiBundle\Security\Authentication\Provider\JWTProvider
+        arguments:
+            - "@security_user_provider"
+            - "@lexik_jwt_authentication.jwt_manager"
+
+    dao_auth_provider:
+        class: SnapRapid\ApiBundle\Security\Authentication\Provider\DaoAuthenticationProvider
+        abstract: true
+        public: false
+        arguments:
+            - ~
+            - "@security.user_checker"
+            - ~
+            - "@security.encoder_factory"
+            - "%security.authentication.hide_user_not_found%"
+
+    security_user_provider:
+        class: SnapRapid\ApiBundle\Security\User\SecurityUserProvider
+        arguments:
+            - "@user_manager"
+
+    jwt_created_listener:
+        class: SnapRapid\ApiBundle\Security\EventListener\JWTCreatedListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    jwt_authentication_failure_handler:
+        class: SnapRapid\ApiBundle\Security\Http\Authentication\AuthenticationFailureHandler
+        arguments:
+            - "@event_dispatcher"
+        tags:
+            - { name: monolog.logger, channel: security }
+
+# todo: fix this
+#    build_validator:
+#        class: SnapRapid\ApiBundle\Security\Http\BuildValidator
+#        arguments:
+#            - "%build%"
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.request, method: validateBuild, priority: 9 }

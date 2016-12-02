@@ -1,0 +1,24 @@
+SnapRapid\Core\Model\Topic:
+    type: document
+    collection: topics
+
+    fields:
+        id:
+            type: id
+            id: true
+        createdAt:
+            type: date
+            name: _created
+        updatedAt:
+            type: date
+            name: _updated
+        name:
+            type: string
+        isRootTopic:
+            type: boolean
+            name: root_topic
+#
+#    referenceMany:
+#        queries:
+#            targetDocument: Queries
+#            inversedBy: topics

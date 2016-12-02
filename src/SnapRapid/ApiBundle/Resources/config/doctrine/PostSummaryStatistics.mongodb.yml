@@ -1,0 +1,23 @@
+SnapRapid\Core\Model\PostSummaryStatistics:
+    type: document
+    collection: dashboards_media_exposure
+
+    fields:
+        id:
+            type: bin_uuid
+            id: true
+            strategy: NONE
+        count:
+            type: int
+        date:
+            type: date
+
+    referenceOne:
+        platform:
+            targetDocument: Platform
+            simple: true
+            storeAs: id
+        topic:
+            name: topics
+            targetDocument: Topic
+            storeAs: id
